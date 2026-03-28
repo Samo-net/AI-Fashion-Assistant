@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(docker compose:*)",
+      "Bash(docker version:*)",
+      "Bash(docker context:*)",
+      "Read(//c/Users/Nwobodo Samuel/scoop/apps/postgresql/current/bin//**)",
+      "Read(//c/Users/Nwobodo Samuel/scoop/apps/redis/current//**)",
+      "Bash(C:/venv/Scripts/alembic upgrade:*)",
+      "Bash(python -m pytest --cov=app tests/ -v)"
+    ]
+  }
+}

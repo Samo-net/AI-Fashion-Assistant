@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -m xml.dom.minidom)",
+      "Bash(powershell -Command \"[System.IO.Compression.ZipFile]::OpenRead\\(\\(Resolve-Path ''''Project Proposal 2.docx''''\\).Path\\)\")",
+      "Bash(unzip -l \"Project Proposal 2.docx\")",
+      "Bash(unzip -p \"Project Proposal 2.docx\" word/document.xml)",
+      "Bash(powershell -Command \"Start-Process ''C:\\\\Program Files\\\\Docker\\\\Docker\\\\Docker Desktop.exe''\")"
+    ]
+  }
+}

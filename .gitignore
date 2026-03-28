@@ -1,0 +1,38 @@
+# Environment
+.env
+*.env
+firebase-credentials.json
+google-services.json
+GoogleService-Info.plist
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+dist/
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Node / React Native
+node_modules/
+.expo/
+.expo-shared/
+dist/
+build/
+*.tgz
+.DS_Store
+
+# IDE
+.vscode/settings.json
+.idea/
+*.swp
+
+# Docker
+*.log
+
+# Alembic
+alembic/versions/__pycache__/

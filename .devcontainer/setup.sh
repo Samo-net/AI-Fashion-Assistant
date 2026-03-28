@@ -16,11 +16,25 @@ pip install --upgrade pip -q
 pip install -r requirements.txt -q
 echo "    Python deps installed."
 
-# ── 3. Copy .env.example → .env if .env doesn't exist ─────────────────────
-if [ ! -f .env ]; then
-  cp .env.example .env
-  echo "    Created .env from .env.example — fill in your API keys!"
+# ── 3. Build .env from Codespaces secrets ──────────────────────────────────
+cp .env.example .env
+
+# Inject secrets from Codespaces environment variables (set in repo settings)
+[ -n "$OPENAI_API_KEY" ]          && sed -i "s|OPENAI_API_KEY=.*|OPENAI_API_KEY=$OPENAI_API_KEY|"                   .env
+[ -n "$OPENAI_MODEL" ]            && sed -i "s|OPENAI_MODEL=.*|OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o-mini}|"           .env
+[ -n "$REPLICATE_API_TOKEN" ]     && sed -i "s|REPLICATE_API_TOKEN=.*|REPLICATE_API_TOKEN=$REPLICATE_API_TOKEN|"     .env
+[ -n "$AWS_ACCESS_KEY_ID" ]       && sed -i "s|AWS_ACCESS_KEY_ID=.*|AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID|"           .env
+[ -n "$AWS_SECRET_ACCESS_KEY" ]   && sed -i "s|AWS_SECRET_ACCESS_KEY=.*|AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY|" .env
+[ -n "$AWS_BUCKET_NAME" ]         && sed -i "s|AWS_BUCKET_NAME=.*|AWS_BUCKET_NAME=$AWS_BUCKET_NAME|"                 .env
+[ -n "$OPENWEATHER_API_KEY" ]     && sed -i "s|OPENWEATHER_API_KEY=.*|OPENWEATHER_API_KEY=$OPENWEATHER_API_KEY|"     .env
+
+# Write firebase-credentials.json from secret
+if [ -n "$FIREBASE_CREDENTIALS" ]; then
+  echo "$FIREBASE_CREDENTIALS" > firebase-credentials.json
+  echo "    Firebase credentials written."
 fi
+
+echo "    .env configured from Codespaces secrets."
 
 # ── 4. Run Alembic migrations ───────────────────────────────────────────────
 echo "==> Running database migrations..."

@@ -112,3 +112,4 @@ pytest tests/ -v --cov=app --cov-report=term-missing
 2. Use CLIP + GPT-4o for personalised outfit recommendations
 3. Use Stable Diffusion + ControlNet for outfit visualisation + usage tracking
 4. Evaluate on accuracy, visual quality, user satisfaction, and ethical compliance
+# AI-Fashion-Assistant

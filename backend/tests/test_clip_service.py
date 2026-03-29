@@ -96,7 +96,14 @@ async def test_classify_and_embed_returns_correct_keys():
 
 
 async def test_classify_and_embed_handles_http_error():
-    with patch("app.ai.clip_service._fetch_image", side_effect=Exception("HTTP 404")):
+    dummy_embeddings = {
+        "category": np.random.rand(5, 512).astype(np.float32),
+        "color": np.random.rand(5, 512).astype(np.float32),
+        "pattern": np.random.rand(5, 512).astype(np.float32),
+        "formality": np.random.rand(5, 512).astype(np.float32),
+    }
+    with patch("app.ai.clip_service._fetch_image", side_effect=Exception("HTTP 404")), \
+         patch("app.ai.clip_service._label_embeddings", dummy_embeddings):
         from app.ai.clip_service import classify_and_embed
         with pytest.raises(Exception, match="HTTP 404"):
             await classify_and_embed("https://bad-url.example.com/img.jpg")

@@ -68,23 +68,27 @@ async def client(db_session):
 
 @pytest_asyncio.fixture
 async def test_user(db_session):
-    """Create a test user record in the DB."""
+    """Get or create the test user — safe to call from multiple tests."""
     from app.models.user import User
+    from sqlalchemy import select
     from datetime import datetime, timezone
 
-    user = User(
-        id=MOCK_USER_ID,
-        email="test@example.com",
-        display_name="Test User",
-        body_type="athletic",
-        skin_tone="deep brown",
-        style_preference="casual",
-        city="Abuja",
-        gdpr_consent=True,
-        consent_timestamp=datetime.now(timezone.utc),
-    )
-    db_session.add(user)
-    await db_session.commit()
+    result = await db_session.execute(select(User).where(User.id == MOCK_USER_ID))
+    user = result.scalar_one_or_none()
+    if not user:
+        user = User(
+            id=MOCK_USER_ID,
+            email="test@example.com",
+            display_name="Test User",
+            body_type="athletic",
+            skin_tone="deep brown",
+            style_preference="casual",
+            city="Abuja",
+            gdpr_consent=True,
+            consent_timestamp=datetime.now(timezone.utc),
+        )
+        db_session.add(user)
+        await db_session.commit()
     return user
 
 

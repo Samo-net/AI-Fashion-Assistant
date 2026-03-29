@@ -98,6 +98,9 @@ async def get_wardrobe_summary(
         log = logs_map.get(item.id)
         wear_count = log.wear_count if log else 0
         last_worn = log.last_worn if log else None
+        # SQLite returns naive datetimes; make timezone-aware before subtracting
+        if last_worn is not None and last_worn.tzinfo is None:
+            last_worn = last_worn.replace(tzinfo=timezone.utc)
         days_since = (now - last_worn).days if last_worn else None
 
         cost_per_wear = None

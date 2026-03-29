@@ -62,7 +62,13 @@ async def create_item(
     )
     db.add(item)
     await db.flush()
-    return item
+    # Reload with tags + server defaults so FastAPI can serialize immediately
+    result = await db.execute(
+        select(WardrobeItem)
+        .options(selectinload(WardrobeItem.tags))
+        .where(WardrobeItem.id == item.id)
+    )
+    return result.scalar_one()
 
 
 async def update_item(
@@ -71,7 +77,13 @@ async def update_item(
     for field, value in updates.model_dump(exclude_none=True).items():
         setattr(item, field, value)
     await db.flush()
-    return item
+    # Reload to pick up updated_at server default and eager-load tags
+    result = await db.execute(
+        select(WardrobeItem)
+        .options(selectinload(WardrobeItem.tags))
+        .where(WardrobeItem.id == item.id)
+    )
+    return result.scalar_one()
 
 
 async def delete_item(db: AsyncSession, item: WardrobeItem) -> None:
